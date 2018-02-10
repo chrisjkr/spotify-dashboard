@@ -3,6 +3,13 @@ import AuthButton from "./AuthButton"
 import styled from 'styled-components'
 
 const Section = styled.section`
+  width: 100%;
+  height: 85vh;
+  display: flex;
+  justify-content: center;
+`
+
+const Container = styled.section`
   width: 400px;
   height: 600px;
   background-color: #292F36;
@@ -15,7 +22,9 @@ const Section = styled.section`
 
 const Auth = () => (
   <Section>
-    <AuthButton>Log in with Spotify</AuthButton>
+    <Container>
+      <AuthButton>Log in with Spotify</AuthButton>
+    </Container>
   </Section>
 )
 

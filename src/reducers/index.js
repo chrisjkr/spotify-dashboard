@@ -2,6 +2,10 @@ import { combineReducers } from 'redux'
 import {
   SAVE_CREDENTIALS,
   SAVE_CREDENTIALS_ERROR,
+  RECEIVE_RECENT_TRACKS,
+  APPEND_TRACKS,
+  APPEND_ALBUMS,
+  APPEND_ARTISTS
 } from '../actions'
 
 const credentials = (state = { isAuthorised: false }, action) => {
@@ -22,6 +26,46 @@ const credentials = (state = { isAuthorised: false }, action) => {
   }
 }
 
+const appendEntities = (entityName, state, action) => {
+  let entities = {}
+  action[entityName].forEach(entity => {
+    if (!state[entityName].hasOwnProperty(entity.id)) {
+      entities[entity.id] = entity
+    }
+  })
+  return {
+    ...state,
+    [entityName]: Object.assign(state[entityName], entities)
+  }
+}
+
+const spotifyData = (
+  state = {
+    tracks: {},
+    albums: {},
+    artists: {},
+    recentTracks: []
+  },
+  action
+) => {
+  switch (action.type) {
+    case RECEIVE_RECENT_TRACKS:
+      return {
+        ...state,
+        recentTracks: action.recentTracks,
+      }
+    case APPEND_TRACKS:
+      return appendEntities('tracks', state, action)
+    case APPEND_ALBUMS:
+      return appendEntities('albums', state, action)
+    case APPEND_ARTISTS:
+      return appendEntities('artists', state, action)
+    default:
+      return state
+  }
+}
+
 export default combineReducers({
   credentials,
+  spotifyData,
 })

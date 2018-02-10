@@ -10,10 +10,11 @@ const AuthButton = ({ children }) => {
       client_id: spotify.clientId,
       response_type: spotify.responseType,
       redirect_uri: spotify.redirectUri,
+      scope: spotify.scope.join(' '),
     }
 
     const queryString = '?' + qs.stringify(params)
-    window.location.href = config.spotify.urls.auth + queryString
+    window.location.href = 'https://accounts.spotify.com/authorize/' + queryString
   }
 
   return <Button onClick={authorise}>{children}</Button>

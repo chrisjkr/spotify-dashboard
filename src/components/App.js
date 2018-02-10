@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
-import AuthoriseHome from '../containers/AuthoriseHome'
+import AuthoriseHome from '../containers/Home'
 import AuthCallback from '../containers/AuthCallback'
 
 class App extends Component {
