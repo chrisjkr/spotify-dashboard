@@ -25,6 +25,7 @@ class TopArtists extends Component {
 
 const mapStateToProps = (state) => {
   const { artists } = state.spotifyData
+  if (!state.spotifyData.topArtists.data) return {}
   const artistsData = state.spotifyData.topArtists.data.map(topArtist => {
     const artist = artists[topArtist.id]
     if (!artist) return false

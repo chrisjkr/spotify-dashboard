@@ -2,10 +2,13 @@ import { combineReducers } from 'redux'
 import {
   SAVE_CREDENTIALS,
   SAVE_CREDENTIALS_ERROR,
+  REMOVE_CREDENTIALS,
   RECEIVE_USER_PROFILE,
+  REMOVE_USER_PROFILE,
   RECEIVE_RECENT_TRACKS,
   RECEIVE_TOP_TRACKS,
   RECEIVE_TOP_ARTISTS,
+  REMOVE_USER_DATA,
   APPEND_TRACKS,
   APPEND_ALBUMS,
   APPEND_ARTISTS,
@@ -23,6 +26,10 @@ const credentials = (state = { isAuthorised: false }, action) => {
       return {
         isAuthorised: false,
       }
+    case REMOVE_CREDENTIALS:
+      return {
+        isAuthorised: false,
+      }
 
     default:
       return state
@@ -30,15 +37,16 @@ const credentials = (state = { isAuthorised: false }, action) => {
 }
 
 const profile = (state = {}, action) => {
-  let newState = { receivedAt: new Date() }
   switch (action.type) {
     case RECEIVE_USER_PROFILE:
       return {
-        ...newState,
+        receivedAt: new Date(),
         id: action.id,
         name: action.name,
         imageUrl: action.imageUrl,
       }
+    case REMOVE_USER_PROFILE:
+      return {}
     default:
       return state
   }
@@ -93,6 +101,14 @@ const spotifyData = (
           receivedAt: new Date(),
         },
       }
+    case REMOVE_USER_DATA:
+      return {
+        ...state,
+        recentTracks: {},
+        topTracks: {},
+        topArtists: {},
+      }
+
     case APPEND_TRACKS:
       return appendEntities('tracks', state, action)
     case APPEND_ALBUMS:
