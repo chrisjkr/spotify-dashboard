@@ -5,7 +5,7 @@ import Dashboard from '../components/Dashboard'
 import styled from 'styled-components'
 
 const HeaderSection = styled.section`
-  height: 15vh;
+  height: 10vh;
   width: 100%;
   text-align: center;
   padding: 30px 0 0 0;

@@ -8,7 +8,7 @@ import Profile from '../containers/Profile'
 const DashboardContainer = styled.section`
   display: grid;
   overflow: hidden;
-  height: 85vh;
+  height: 90vh;
   width: 95%;
   grid-template-columns: 33.3% 33.3% 33.3%;
   grid-column-gap: 20px;
