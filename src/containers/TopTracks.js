@@ -2,14 +2,14 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import TrackList from '../components/TrackList'
 import {
-  fetchRecentTracks,
+  fetchTopTracks,
 } from '../actions'
 
-class RecentTracks extends Component {
+class TopTracks extends Component {
   componentDidMount() {
     const { dispatch } = this.props
     if (dispatch) {
-      dispatch(fetchRecentTracks())
+      dispatch(fetchTopTracks())
     }
   }
 
@@ -27,8 +27,8 @@ const mapStateToProps = (state) => {
   const { tracks, albums, artists } = state.spotifyData
 
   if (Object.keys(tracks).length && Object.keys(albums).length && Object.keys(artists).length) {
-    const tracksData = state.spotifyData.recentTracks.map(recentTrack => {
-      const track = tracks[recentTrack.id]
+    const tracksData = state.spotifyData.topTracks.map(topTrack => {
+      const track = tracks[topTrack.id]
       if (!track) return false
       const album = albums[track.albumId]
       if (!album) return false
@@ -40,10 +40,8 @@ const mapStateToProps = (state) => {
         url: track.url,
         album,
         artists: artistList,
-        playedAt: recentTrack.playedAt,
       }
     })
-
     return { tracks: tracksData.filter(track => track !== false) }
   }
 
@@ -52,4 +50,4 @@ const mapStateToProps = (state) => {
 
 export default connect(
   mapStateToProps
-)(RecentTracks)
+)(TopTracks)

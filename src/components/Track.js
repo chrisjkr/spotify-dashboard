@@ -65,7 +65,7 @@ const Track = ({
 }) => {
   const artistElements = artists.map((artist, index) => (
     <Artist key={index} href={artist.url}>{artist.name}</Artist>
-  ))
+  )).reduce((prev, curr) => [prev, ', ', curr])
 
   return (
     <TrackItem>

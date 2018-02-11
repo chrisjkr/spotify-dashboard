@@ -3,9 +3,10 @@ import {
   SAVE_CREDENTIALS,
   SAVE_CREDENTIALS_ERROR,
   RECEIVE_RECENT_TRACKS,
+  RECEIVE_TOP_TRACKS,
   APPEND_TRACKS,
   APPEND_ALBUMS,
-  APPEND_ARTISTS
+  APPEND_ARTISTS,
 } from '../actions'
 
 const credentials = (state = { isAuthorised: false }, action) => {
@@ -53,6 +54,11 @@ const spotifyData = (
       return {
         ...state,
         recentTracks: action.recentTracks,
+      }
+    case RECEIVE_TOP_TRACKS:
+      return {
+        ...state,
+        topTracks: action.topTracks,
       }
     case APPEND_TRACKS:
       return appendEntities('tracks', state, action)

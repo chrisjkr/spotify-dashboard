@@ -1,5 +1,6 @@
 import React from 'react'
-import RecentTracks from "../containers/RecentTracks";
+import RecentTracks from '../containers/RecentTracks'
+import TopTracks from '../containers/TopTracks'
 import styled from 'styled-components'
 
 const DashboardContainer = styled.section`
@@ -18,7 +19,10 @@ const Dashboard = () => (
       <h2>Recent plays:</h2>
       <RecentTracks/>
     </section>
-    <section>Something else</section>
+    <section>
+      <h2>Top tracks:</h2>
+      <TopTracks/>
+    </section>
     <section>Something else</section>
   </DashboardContainer>
 )
