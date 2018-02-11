@@ -4,6 +4,7 @@ import {
   SAVE_CREDENTIALS_ERROR,
   RECEIVE_RECENT_TRACKS,
   RECEIVE_TOP_TRACKS,
+  RECEIVE_TOP_ARTISTS,
   APPEND_TRACKS,
   APPEND_ALBUMS,
   APPEND_ARTISTS,
@@ -45,7 +46,9 @@ const spotifyData = (
     tracks: {},
     albums: {},
     artists: {},
-    recentTracks: []
+    recentTracks: [],
+    topTracks: [],
+    topArtists: [],
   },
   action
 ) => {
@@ -59,6 +62,11 @@ const spotifyData = (
       return {
         ...state,
         topTracks: action.topTracks,
+      }
+    case RECEIVE_TOP_ARTISTS:
+      return {
+        ...state,
+        topArtists: action.topArtists,
       }
     case APPEND_TRACKS:
       return appendEntities('tracks', state, action)

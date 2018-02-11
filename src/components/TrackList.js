@@ -1,12 +1,6 @@
 import React from 'react'
 import Track from "./Track"
-import styled from 'styled-components'
-
-const TrackListContainer = styled.section`
-  width: 100%;
-  height: 85vh;
-  overflow: auto;
-`
+import CardList from './CardList'
 
 const TrackList = ({ tracks }) => {
   const buildTrackList = () => tracks.map((track, index) => {
@@ -21,9 +15,9 @@ const TrackList = ({ tracks }) => {
   })
 
   return (
-    <TrackListContainer>
+    <CardList>
       {buildTrackList()}
-    </TrackListContainer>
+    </CardList>
   )
 }
 

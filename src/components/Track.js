@@ -1,23 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import Image from 'react-image'
 import distanceInWords from 'date-fns/distance_in_words_to_now'
-
-const TrackItem = styled.div`
-  width: 90%;
-  margin: 10px;
-  background-color: #292F36;
-  border-radius: 10px;
-  display: grid;
-  grid-template-columns: 30% 70%;
-  grid-column-gap: 20px;
-`
-
-const AlbumCover = styled(Image)`
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-`
+import ImageCard from './ImageCard'
 
 const TitleLink = styled.a`
   text-decoration: none;
@@ -52,7 +36,11 @@ const Album = styled.a`
 `
 
 const PlayedAt = styled.span`
-  
+  color: #16e176;
+`
+
+const Row = styled.p`
+  margin: 2px 0;
 `
 
 const Track = ({
@@ -68,20 +56,15 @@ const Track = ({
   )).reduce((prev, curr) => [prev, ', ', curr])
 
   return (
-    <TrackItem>
-      <div>
-        <AlbumCover src={imageUrl}/>
-      </div>
-      <div>
-        <TitleLink href={trackUrl}>{title}</TitleLink>
-        <p>{artistElements}</p>
-        <p><Album href={album.url}>{album.name}</Album></p>
-        {playedAt
-          ? <p><PlayedAt>{distanceInWords(new Date(playedAt))} ago</PlayedAt></p>
-          : ''
-        }
-      </div>
-    </TrackItem>
+    <ImageCard imageUrl={imageUrl}>
+      <TitleLink href={trackUrl}>{title}</TitleLink>
+      <Row>{artistElements}</Row>
+      <Row><Album href={album.url}>{album.name}</Album></Row>
+      {playedAt
+        ? <Row style={{marginTop: '10px'}}><PlayedAt>{distanceInWords(new Date(playedAt))} ago</PlayedAt></Row>
+        : ''
+      }
+    </ImageCard>
   )
 }
 
