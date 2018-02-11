@@ -8,11 +8,16 @@ const DashboardContainer = styled.section`
   height: 85vh;
   width: 100%;
   grid-template-columns: 33.3% 33.3% 33.3%;
+  grid-column-gap: 20px;
+  padding: 0 20px;
 `
 
 const Dashboard = () => (
   <DashboardContainer>
-    <RecentTracks/>
+    <section>
+      <h2>Recent plays:</h2>
+      <RecentTracks/>
+    </section>
     <section>Something else</section>
     <section>Something else</section>
   </DashboardContainer>
