@@ -3,6 +3,7 @@ import RecentTracks from '../containers/RecentTracks'
 import TopTracks from '../containers/TopTracks'
 import TopArtists from '../containers/TopArtists'
 import styled from 'styled-components'
+import Profile from '../containers/Profile'
 
 const DashboardContainer = styled.section`
   display: grid;
@@ -20,6 +21,9 @@ const SectionHeader = styled.h2`
 
 const Dashboard = () => (
   <DashboardContainer>
+    <Profile/>
+    <section></section>
+    <section></section>
     <section>
       <SectionHeader>Recent plays:</SectionHeader>
       <RecentTracks/>

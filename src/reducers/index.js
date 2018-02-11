@@ -2,6 +2,7 @@ import { combineReducers } from 'redux'
 import {
   SAVE_CREDENTIALS,
   SAVE_CREDENTIALS_ERROR,
+  RECEIVE_USER_PROFILE,
   RECEIVE_RECENT_TRACKS,
   RECEIVE_TOP_TRACKS,
   RECEIVE_TOP_ARTISTS,
@@ -23,6 +24,19 @@ const credentials = (state = { isAuthorised: false }, action) => {
         isAuthorised: false,
       }
 
+    default:
+      return state
+  }
+}
+
+const profile = (state = {}, action) => {
+  switch (action.type) {
+    case RECEIVE_USER_PROFILE:
+      return {
+        id: action.id,
+        name: action.name,
+        imageUrl: action.imageUrl,
+      }
     default:
       return state
   }
@@ -81,5 +95,6 @@ const spotifyData = (
 
 export default combineReducers({
   credentials,
+  profile,
   spotifyData,
 })
