@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import Image from 'react-image'
+import Logout from './Logout'
 import { fetchUserProfile } from '../actions'
 
 const Section = styled.section`
@@ -32,7 +33,9 @@ class Profile extends Component {
 
     return (
       <Section>
-        <h3>Hello, <ProfileImage src={profile.imageUrl}/> <Name>{profile.name}</Name></h3>
+        <h3>
+          Hello, <ProfileImage src={profile.imageUrl}/> <Name>{profile.name}</Name> | <Logout>Logout</Logout>
+        </h3>
       </Section>
     )
   }

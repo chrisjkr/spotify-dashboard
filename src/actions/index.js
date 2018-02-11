@@ -3,10 +3,13 @@ import getTime from 'date-fns/get_time'
 
 export const SAVE_CREDENTIALS = 'SAVE_CREDENTIALS'
 export const SAVE_CREDENTIALS_ERROR = 'SAVE_CREDENTIALS_ERROR'
+export const REMOVE_CREDENTIALS = 'REMOVE_CREDENTIALS'
 export const RECEIVE_USER_PROFILE = 'RECEIVE_USER_PROFILE'
+export const REMOVE_USER_PROFILE = 'REMOVE_USER_PROFILE'
 export const RECEIVE_RECENT_TRACKS = 'RECEIVE_RECENT_TRACKS'
 export const RECEIVE_TOP_TRACKS = 'RECEIVE_TOP_TRACKS'
 export const RECEIVE_TOP_ARTISTS = 'RECEIVE_TOP_ARTISTS'
+export const REMOVE_USER_DATA = 'REMOVE_USER_DATA'
 export const APPEND_TRACKS = 'APPEND_TRACKS'
 export const APPEND_ALBUMS = 'APPEND_ALBUMS'
 export const APPEND_ARTISTS = 'APPEND_ARTISTS'
@@ -23,11 +26,19 @@ export const saveCredentialsError = () => ({
   isAuthorised: false,
 })
 
+export const removeCredentials = () => ({
+  type: REMOVE_CREDENTIALS,
+})
+
 export const receiveUserProfile = (profile) => ({
   type: RECEIVE_USER_PROFILE,
   id: profile.id,
   name: profile.display_name,
   imageUrl: profile.images[0].url,
+})
+
+export const removeUserProfile = () => ({
+  type: REMOVE_USER_PROFILE,
 })
 
 export const receiveRecentTracks = (tracks) => ({
@@ -43,6 +54,10 @@ export const receiveTopTracks = (tracks) => ({
 export const receiveTopArtists = (artists) => ({
   type: RECEIVE_TOP_ARTISTS,
   topArtists: artists,
+})
+
+export const removeUserData = () => ({
+  type: REMOVE_USER_DATA,
 })
 
 export const appendTracks = (tracks) => ({
@@ -94,6 +109,12 @@ export const fetchUserProfile = () => async (dispatch, getState) => {
       console.error(err)
     }
   }
+}
+
+export const clearUserData = () => async (dispatch) => {
+  dispatch(removeCredentials())
+  dispatch(removeUserProfile())
+  dispatch(removeUserData())
 }
 
 export const fetchRecentTracks = () => async (dispatch, getState) => {

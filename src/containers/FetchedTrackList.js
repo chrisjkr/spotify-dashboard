@@ -32,7 +32,7 @@ const FetchedTrackList = (fetchAction, trackList, withPlayedAtData = false) => {
   const mapStateToProps = (state) => {
     const { tracks, albums, artists } = state.spotifyData
 
-    if (Object.keys(tracks).length && Object.keys(albums).length && Object.keys(artists).length) {
+    if (state.spotifyData[trackList].data) {
       const tracksData = state.spotifyData[trackList].data.map(listTrack => {
         const track = tracks[listTrack.id]
         if (!track) return false
