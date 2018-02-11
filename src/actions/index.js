@@ -2,6 +2,7 @@ import qs from 'query-string'
 
 export const SAVE_CREDENTIALS = 'SAVE_CREDENTIALS'
 export const SAVE_CREDENTIALS_ERROR = 'SAVE_CREDENTIALS_ERROR'
+export const RECEIVE_USER_PROFILE = 'RECEIVE_USER_PROFILE'
 export const RECEIVE_RECENT_TRACKS = 'RECEIVE_RECENT_TRACKS'
 export const RECEIVE_TOP_TRACKS = 'RECEIVE_TOP_TRACKS'
 export const RECEIVE_TOP_ARTISTS = 'RECEIVE_TOP_ARTISTS'
@@ -19,6 +20,13 @@ export const saveCredentials = (accessToken, expiresIn) => ({
 export const saveCredentialsError = () => ({
   type: SAVE_CREDENTIALS_ERROR,
   isAuthorised: false,
+})
+
+export const receiveUserProfile = (profile) => ({
+  type: RECEIVE_USER_PROFILE,
+  id: profile.id,
+  name: profile.display_name,
+  imageUrl: profile.images[0].url,
 })
 
 export const receiveRecentTracks = (tracks) => ({
@@ -65,6 +73,18 @@ const fetchWithAuth = async (url, token) => {
     }
   })
   return await response.json()
+}
+
+export const fetchUserProfile = () => async (dispatch, getState) => {
+  try {
+    const json = await fetchWithAuth(
+      'https://api.spotify.com/v1/me',
+      getState().credentials.accessToken,
+    )
+    dispatch(receiveUserProfile(json))
+  } catch (err) {
+    console.error(err)
+  }
 }
 
 export const fetchRecentTracks = () => async (dispatch, getState) => {
