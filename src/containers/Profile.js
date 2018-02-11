@@ -14,6 +14,11 @@ const ProfileImage = styled(Image)`
   border-radius: 50%;
 `
 
+const Name = styled.span`
+  color: #16e176;
+  font-weight: 700;
+`
+
 class Profile extends Component {
   componentDidMount() {
     const { dispatch } = this.props
@@ -27,7 +32,7 @@ class Profile extends Component {
 
     return (
       <Section>
-        <h3>Hello, <ProfileImage src={profile.imageUrl}/> {profile.name}</h3>
+        <h3>Hello, <ProfileImage src={profile.imageUrl}/> <Name>{profile.name}</Name></h3>
       </Section>
     )
   }
