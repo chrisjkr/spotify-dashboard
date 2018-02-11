@@ -1,6 +1,9 @@
+import qs from 'query-string'
+
 export const SAVE_CREDENTIALS = 'SAVE_CREDENTIALS'
 export const SAVE_CREDENTIALS_ERROR = 'SAVE_CREDENTIALS_ERROR'
 export const RECEIVE_RECENT_TRACKS = 'RECEIVE_RECENT_TRACKS'
+export const RECEIVE_TOP_TRACKS = 'RECEIVE_TOP_TRACKS'
 export const APPEND_TRACKS = 'APPEND_TRACKS'
 export const APPEND_ALBUMS = 'APPEND_ALBUMS'
 export const APPEND_ARTISTS = 'APPEND_ARTISTS'
@@ -22,9 +25,14 @@ export const receiveRecentTracks = (tracks) => ({
   recentTracks: tracks,
 })
 
+export const receiveTopTracks = (tracks) => ({
+  type: RECEIVE_TOP_TRACKS,
+  topTracks: tracks,
+})
+
 export const appendTracks = (tracks) => ({
   type: APPEND_TRACKS,
-  tracks
+  tracks,
 })
 
 export const appendAlbums = (albums) => ({
@@ -176,6 +184,25 @@ const fetchUnsavedArtists = (artistIds) => async (dispatch, getState) => {
     )
     const artists = parseArtists(json.artists)
     return dispatch(appendArtists(artists))
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+export const fetchTopTracks = () => async (dispatch, getState) => {
+  try {
+    const params = {
+      time_range: 'long_term',
+    }
+    const json = await fetchWithAuth(
+      `https://api.spotify.com/v1/me/top/tracks/?${qs.stringify(params)}`,
+      getState().credentials.accessToken,
+    )
+    console.log(json)
+    const tracks = parseTracks(json.items)
+    dispatch(receiveTopTracks(tracks))
+    const trackIds = tracks.map(track => track.id)
+    dispatch(fetchUnsavedTracks(trackIds))
   } catch (err) {
     console.error(err)
   }
