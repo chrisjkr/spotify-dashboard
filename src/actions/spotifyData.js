@@ -138,6 +138,7 @@ const parseAlbums = (albums) => albums.map(album => {
   return {
     id: album.id,
     name: album.name,
+    url: album.external_urls.spotify,
     imageUrl: album.images[1].url,
     artistIds,
   }
