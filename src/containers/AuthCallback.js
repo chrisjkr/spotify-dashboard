@@ -4,7 +4,7 @@ import qs from 'query-string'
 import {
   saveCredentials,
   saveCredentialsError
-} from '../actions'
+} from '../actions/credentials'
 
 class AuthCallback extends Component {
   componentWillMount() {

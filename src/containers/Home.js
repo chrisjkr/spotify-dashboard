@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Auth from "../components/Auth";
-import Dashboard from "../components/Dashboard";
+import Auth from '../components/Auth'
+import Dashboard from '../components/Dashboard'
 import styled from 'styled-components'
 
 const HeaderSection = styled.section`

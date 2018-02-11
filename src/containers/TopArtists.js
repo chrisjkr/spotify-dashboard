@@ -2,8 +2,8 @@ import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import {
   fetchTopArtists,
-} from '../actions'
-import ArtistList from "../components/ArtistList";
+} from '../actions/spotifyData'
+import ArtistList from '../components/ArtistList'
 
 class TopArtists extends Component {
   componentDidMount() {

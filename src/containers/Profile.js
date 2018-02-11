@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 import Image from 'react-image'
 import Logout from './Logout'
-import { fetchUserProfile } from '../actions'
+import { fetchUserProfile } from '../actions/profile'
 
 const Section = styled.section`
 
