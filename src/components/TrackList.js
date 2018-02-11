@@ -16,6 +16,7 @@ const TrackList = ({ tracks }) => {
                   imageUrl={track.album.imageUrl}
                   trackUrl={track.url}
                   album={track.album}
+                  playedAt={track.playedAt}
     />
   })
 

@@ -37,6 +37,7 @@ const mapStateToProps = (state) => {
         url: track.url,
         album,
         artists: artistList,
+        playedAt: recentTrack.playedAt,
       }
     })
     return { tracks: tracksData }

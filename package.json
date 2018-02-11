@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "date-fns": "^1.29.0",
     "history": "^4.7.2",
     "prop-types": "^15.6.0",
     "query-string": "^5.1.0",

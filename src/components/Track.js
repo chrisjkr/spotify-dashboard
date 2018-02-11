@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Image from 'react-image'
+import distanceInWords from 'date-fns/distance_in_words_to_now'
 
 const TrackItem = styled.div`
   width: 90%;
@@ -50,15 +51,20 @@ const Album = styled.a`
   }
 `
 
+const PlayedAt = styled.span`
+  
+`
+
 const Track = ({
   title,
   artists,
   imageUrl,
   trackUrl,
   album,
+  playedAt = ''
 }) => {
-  const artistElements = artists.map(artist => (
-    <Artist href={artist.url}>{artist.name}</Artist>
+  const artistElements = artists.map((artist, index) => (
+    <Artist key={index} href={artist.url}>{artist.name}</Artist>
   ))
 
   return (
@@ -68,8 +74,12 @@ const Track = ({
       </div>
       <div>
         <TitleLink href={trackUrl}>{title}</TitleLink>
-        <p><Artist>{artistElements}</Artist></p>
+        <p>{artistElements}</p>
         <p><Album href={album.url}>{album.name}</Album></p>
+        {playedAt
+          ? <p><PlayedAt>{distanceInWords(new Date(playedAt))} ago</PlayedAt></p>
+          : ''
+        }
       </div>
     </TrackItem>
   )
