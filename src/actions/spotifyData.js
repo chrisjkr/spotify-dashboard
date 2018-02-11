@@ -9,16 +9,26 @@ export const APPEND_TRACKS = 'APPEND_TRACKS'
 export const APPEND_ALBUMS = 'APPEND_ALBUMS'
 export const APPEND_ARTISTS = 'APPEND_ARTISTS'
 
+/**
+ *
+ * @param {array.<object>} tracks
+ */
 export const receiveRecentTracks = (tracks) => ({
   type: RECEIVE_RECENT_TRACKS,
   recentTracks: tracks,
 })
 
+/**
+ * @param {array.<object>} tracks
+ */
 export const receiveTopTracks = (tracks) => ({
   type: RECEIVE_TOP_TRACKS,
   topTracks: tracks,
 })
 
+/**
+ * @param {array.<object>} artists
+ */
 export const receiveTopArtists = (artists) => ({
   type: RECEIVE_TOP_ARTISTS,
   topArtists: artists,
@@ -28,21 +38,33 @@ export const removeUserData = () => ({
   type: REMOVE_USER_DATA,
 })
 
+/**
+ * @param {array.<object>} tracks
+ */
 export const appendTracks = (tracks) => ({
   type: APPEND_TRACKS,
   tracks,
 })
 
+/**
+ * @param {array.<object>} albums
+ */
 export const appendAlbums = (albums) => ({
   type: APPEND_ALBUMS,
   albums,
 })
 
+/**
+ * @param {array.<object>} artists
+ */
 export const appendArtists = (artists) => ({
   type: APPEND_ARTISTS,
   artists,
 })
 
+/**
+ * Fetches recently played tracks.
+ */
 export const fetchRecentTracks = () => async (dispatch, getState) => {
   const state = getState()
   if (shouldFetch(state.spotifyData.recentTracks))
@@ -106,6 +128,11 @@ export const fetchUnsavedTracks = (trackIds) => async (dispatch, getState) => {
   }
 }
 
+/**
+ * Parses received album data.
+ *
+ * @param {array.<object>} albums
+ */
 const parseAlbums = (albums) => albums.map(album => {
   const artistIds = album.artists.map(artist => artist.id)
   return {
@@ -145,6 +172,11 @@ const fetchUnsavedAlbums = (albumIds) => async (dispatch, getState) => {
   }
 }
 
+/**
+ * Parses received artists data.
+ *
+ * @param {array.<object>} artists
+ */
 const parseArtists = (artists) => artists.map(artist => ({
   id: artist.id,
   name: artist.name,
@@ -155,7 +187,7 @@ const parseArtists = (artists) => artists.map(artist => ({
 /**
  * Filters passed artist ids and fetches unsaved artists data.
  *
- * @param {Array.<String>} artistIds
+ * @param {array.<string>} artistIds
  */
 const fetchUnsavedArtists = (artistIds) => async (dispatch, getState) => {
   const state = getState()
@@ -179,6 +211,9 @@ const fetchUnsavedArtists = (artistIds) => async (dispatch, getState) => {
   }
 }
 
+/**
+ * Fetches user's most played tracks.
+ */
 export const fetchTopTracks = () => async (dispatch, getState) => {
   const state = getState()
   if (shouldFetch(state.spotifyData.topTracks)) {
@@ -200,6 +235,9 @@ export const fetchTopTracks = () => async (dispatch, getState) => {
   }
 }
 
+/**
+ * Fetches user's most played artists.
+ */
 export const fetchTopArtists = () => async (dispatch, getState) => {
   const state = getState()
   if (shouldFetch(state.spotifyData.topArtists)) {

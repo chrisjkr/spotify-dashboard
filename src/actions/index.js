@@ -19,11 +19,20 @@ export const fetchWithAuth = async (url, token) => {
   return await response.json()
 }
 
+/**
+ * Checks if data was fetched in the last 5 minutes.
+ *
+ * @param {object} subState - Needs to have structure of {data: array, receivedAt: Date}
+ * @returns {boolean} - Whether data was fetched more than 5 minutes ago.
+ */
 export const shouldFetch = (subState) => {
   const receivedAt = subState.receivedAt
   return !receivedAt || getTime(new Date()) - getTime(receivedAt) > 1000 * 60 * 5;
 }
 
+/**
+ * Clears user data. Used for logging out.
+ */
 export const clearUserData = () => async (dispatch) => {
   dispatch(removeCredentials())
   dispatch(removeUserProfile())
