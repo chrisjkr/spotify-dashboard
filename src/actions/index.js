@@ -1,4 +1,5 @@
 import qs from 'query-string'
+import getTime from 'date-fns/get_time'
 
 export const SAVE_CREDENTIALS = 'SAVE_CREDENTIALS'
 export const SAVE_CREDENTIALS_ERROR = 'SAVE_CREDENTIALS_ERROR'
@@ -75,23 +76,33 @@ const fetchWithAuth = async (url, token) => {
   return await response.json()
 }
 
+const shouldFetch = (subState) => {
+  const receivedAt = subState.receivedAt
+  return !receivedAt || getTime(new Date()) - getTime(receivedAt) > 1000 * 60 * 5;
+}
+
 export const fetchUserProfile = () => async (dispatch, getState) => {
-  try {
-    const json = await fetchWithAuth(
-      'https://api.spotify.com/v1/me',
-      getState().credentials.accessToken,
-    )
-    dispatch(receiveUserProfile(json))
-  } catch (err) {
-    console.error(err)
+  const state = getState()
+  if (shouldFetch(state.profile)) {
+    try {
+      const json = await fetchWithAuth(
+        'https://api.spotify.com/v1/me',
+        state.credentials.accessToken,
+      )
+      dispatch(receiveUserProfile(json))
+    } catch (err) {
+      console.error(err)
+    }
   }
 }
 
 export const fetchRecentTracks = () => async (dispatch, getState) => {
+  const state = getState()
+  if (shouldFetch(state.spotifyData.recentTracks))
   try {
     const json = await fetchWithAuth(
       'https://api.spotify.com/v1/me/player/recently-played',
-      getState().credentials.accessToken,
+      state.credentials.accessToken,
     )
     const tracks = json.items.map(item => ({
       id: item.track.id,
@@ -131,18 +142,20 @@ export const fetchUnsavedTracks = (trackIds) => async (dispatch, getState) => {
     self.indexOf(trackId) === index && !savedTracks.hasOwnProperty(trackId))
   )
 
-  const trackIdsString = unsavedTracks.join(',')
-  try {
-    const json = await fetchWithAuth(
-      `https://api.spotify.com/v1/tracks/?ids=${trackIdsString}`,
-      state.credentials.accessToken,
-    )
-    const tracks = parseTracks(json.tracks)
-    const albumIds = tracks.map(track => track.albumId)
-    dispatch(appendTracks(tracks))
-    dispatch(fetchUnsavedAlbums(albumIds))
-  } catch (err) {
-    console.error(err)
+  if (unsavedTracks.length) {
+    const trackIdsString = unsavedTracks.join(',')
+    try {
+      const json = await fetchWithAuth(
+        `https://api.spotify.com/v1/tracks/?ids=${trackIdsString}`,
+        state.credentials.accessToken,
+      )
+      const tracks = parseTracks(json.tracks)
+      const albumIds = tracks.map(track => track.albumId)
+      dispatch(appendTracks(tracks))
+      dispatch(fetchUnsavedAlbums(albumIds))
+    } catch (err) {
+      console.error(err)
+    }
   }
 }
 
@@ -168,18 +181,20 @@ const fetchUnsavedAlbums = (albumIds) => async (dispatch, getState) => {
     self.indexOf(albumId) === index && !savedAlbums.hasOwnProperty(albumId))
   )
 
-  const albumIdsString = unsavedAlbums.join(',')
-  try {
-    const json = await fetchWithAuth(
-      `https://api.spotify.com/v1/albums/?ids=${albumIdsString}`,
-      state.credentials.accessToken,
-    )
-    const albums = parseAlbums(json.albums)
-    dispatch(appendAlbums(albums))
-    let artistIds = [].concat.apply([], albums.map(album => album.artistIds))
-    dispatch(fetchUnsavedArtists(artistIds))
-  } catch (err) {
-    console.error(err)
+  if (unsavedAlbums.length) {
+    const albumIdsString = unsavedAlbums.join(',')
+    try {
+      const json = await fetchWithAuth(
+        `https://api.spotify.com/v1/albums/?ids=${albumIdsString}`,
+        state.credentials.accessToken,
+      )
+      const albums = parseAlbums(json.albums)
+      dispatch(appendAlbums(albums))
+      let artistIds = [].concat.apply([], albums.map(album => album.artistIds))
+      dispatch(fetchUnsavedArtists(artistIds))
+    } catch (err) {
+      console.error(err)
+    }
   }
 }
 
@@ -202,51 +217,59 @@ const fetchUnsavedArtists = (artistIds) => async (dispatch, getState) => {
     self.indexOf(artistId) === index && !savedArtists.hasOwnProperty(artistId))
   )
 
-  const artistIdsString = unsavedArtists.join(',')
-  try {
-    const json = await fetchWithAuth(
-      `https://api.spotify.com/v1/artists/?ids=${artistIdsString}`,
-      state.credentials.accessToken,
-    )
-    const artists = parseArtists(json.artists)
-    return dispatch(appendArtists(artists))
-  } catch (err) {
-    console.error(err)
+  if (unsavedArtists.length) {
+    const artistIdsString = unsavedArtists.join(',')
+    try {
+      const json = await fetchWithAuth(
+        `https://api.spotify.com/v1/artists/?ids=${artistIdsString}`,
+        state.credentials.accessToken,
+      )
+      const artists = parseArtists(json.artists)
+      return dispatch(appendArtists(artists))
+    } catch (err) {
+      console.error(err)
+    }
   }
 }
 
 export const fetchTopTracks = () => async (dispatch, getState) => {
-  try {
-    const params = {
-      time_range: 'long_term',
+  const state = getState()
+  if (shouldFetch(state.spotifyData.topTracks)) {
+    try {
+      const params = {
+        time_range: 'long_term',
+      }
+      const json = await fetchWithAuth(
+        `https://api.spotify.com/v1/me/top/tracks/?${qs.stringify(params)}`,
+        state.credentials.accessToken,
+      )
+      const tracks = parseTracks(json.items)
+      dispatch(receiveTopTracks(tracks))
+      const trackIds = tracks.map(track => track.id)
+      dispatch(fetchUnsavedTracks(trackIds))
+    } catch (err) {
+      console.error(err)
     }
-    const json = await fetchWithAuth(
-      `https://api.spotify.com/v1/me/top/tracks/?${qs.stringify(params)}`,
-      getState().credentials.accessToken,
-    )
-    const tracks = parseTracks(json.items)
-    dispatch(receiveTopTracks(tracks))
-    const trackIds = tracks.map(track => track.id)
-    dispatch(fetchUnsavedTracks(trackIds))
-  } catch (err) {
-    console.error(err)
   }
 }
 
 export const fetchTopArtists = () => async (dispatch, getState) => {
-  try {
-    const params = {
-      time_range: 'long_term',
+  const state = getState()
+  if (shouldFetch(state.spotifyData.topArtists)) {
+    try {
+      const params = {
+        time_range: 'long_term',
+      }
+      const json = await fetchWithAuth(
+        `https://api.spotify.com/v1/me/top/artists/?${qs.stringify(params)}`,
+        state.credentials.accessToken,
+      )
+      const artists = json.items.map(artist => ({ id: artist.id }))
+      dispatch(receiveTopArtists(artists))
+      const artistIds = artists.map(artist => artist.id)
+      dispatch(fetchUnsavedArtists(artistIds))
+    } catch (err) {
+      console.error(err)
     }
-    const json = await fetchWithAuth(
-      `https://api.spotify.com/v1/me/top/artists/?${qs.stringify(params)}`,
-      getState().credentials.accessToken,
-    )
-    const artists = json.items.map(artist => ({ id: artist.id }))
-    dispatch(receiveTopArtists(artists))
-    const artistIds = artists.map(artist => artist.id)
-    dispatch(fetchUnsavedArtists(artistIds))
-  } catch (err) {
-    console.error(err)
   }
 }

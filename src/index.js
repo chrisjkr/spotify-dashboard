@@ -8,10 +8,16 @@ import './index.css'
 import App from './components/App'
 import registerServiceWorker from './registerServiceWorker'
 import reducer from './reducers'
+import {
+  loadState,
+  saveState,
+} from './localStorage'
 
 const middleware = [ thunk, createLogger() ]
 
-const store = createStore(reducer, applyMiddleware(...middleware))
+const store = createStore(reducer, loadState(), applyMiddleware(...middleware))
+
+store.subscribe(() => { saveState(store.getState()) })
 
 ReactDOM.render(
   <Provider store={store}>

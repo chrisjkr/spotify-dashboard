@@ -30,9 +30,11 @@ const credentials = (state = { isAuthorised: false }, action) => {
 }
 
 const profile = (state = {}, action) => {
+  let newState = { receivedAt: new Date() }
   switch (action.type) {
     case RECEIVE_USER_PROFILE:
       return {
+        ...newState,
         id: action.id,
         name: action.name,
         imageUrl: action.imageUrl,
@@ -60,9 +62,9 @@ const spotifyData = (
     tracks: {},
     albums: {},
     artists: {},
-    recentTracks: [],
-    topTracks: [],
-    topArtists: [],
+    recentTracks: { data: [] },
+    topTracks: { data: [] },
+    topArtists: { data: [] },
   },
   action
 ) => {
@@ -70,17 +72,26 @@ const spotifyData = (
     case RECEIVE_RECENT_TRACKS:
       return {
         ...state,
-        recentTracks: action.recentTracks,
+        recentTracks: {
+          data: action.recentTracks,
+          receivedAt: new Date(),
+        },
       }
     case RECEIVE_TOP_TRACKS:
       return {
         ...state,
-        topTracks: action.topTracks,
+        topTracks: {
+          data: action.topTracks,
+          receivedAt: new Date(),
+        },
       }
     case RECEIVE_TOP_ARTISTS:
       return {
         ...state,
-        topArtists: action.topArtists,
+        topArtists: {
+          data: action.topArtists,
+          receivedAt: new Date(),
+        },
       }
     case APPEND_TRACKS:
       return appendEntities('tracks', state, action)
