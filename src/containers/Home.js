@@ -8,10 +8,13 @@ const HeaderSection = styled.section`
   height: 15vh;
   width: 100%;
   text-align: center;
+  padding: 30px 0 0 0;
 `
 
 const Header = styled.h1`
   margin: 0;
+  color: #16e176;
+  font-size: 40px;
 `
 
 const Home = (props) => (
